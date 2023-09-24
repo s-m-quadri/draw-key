@@ -21,6 +21,6 @@ Link: [Research Paper and documentation](https://s-m-quadri.gitbook.io/drawkey/)
 
 ## Getting Involved
 
-If you're interested in contributing, testing, or providing feedback, please feel free to get involved! We appreciate your support as we work towards making DrawKey a secure and user-friendly authentication solution.
+If you're interested in contributing, testing, or providing feedback, please feel free to <a href="mailto:dev.smq@gmail.com">get involved</a>! We appreciate your support as we work towards making DrawKey a secure and user-friendly authentication solution.
 
 Thank you for your understanding, and stay tuned for updates!
