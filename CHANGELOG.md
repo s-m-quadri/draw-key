@@ -2,9 +2,10 @@
 
 ## 📌 25 September 2023
 
-- Given title to the prject and designed the logo
+- Given title to the project and designed the logo
 - Created GitHub Repository
-- Created space for documentation and reasearch work on GitBook
+- Created space for documentation and research work on GitBook
 - Added README, CHANGELOG, etc. files to GitHub repository
 - Added links to contact, contribution and documentation link on repository
-- etc.
+- Updated Literature Review, Abstract and Intro. Section on GitBook
+- Create a Project Overview Presentation
