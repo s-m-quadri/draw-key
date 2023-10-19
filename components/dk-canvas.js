@@ -56,6 +56,7 @@ export default function DKCanvas() {
           height={globalThis.window?.innerHeight / 2}
           className={styles.board}
           onMouseDown={handleMouseDown}
+          onTap={handleMouseDown}
           onMousemove={handleMouseMove}
           onMouseup={handleMouseUp}
         >
