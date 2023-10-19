@@ -1,0 +1,26 @@
+.canvas {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  box-shadow: 10;
+  
+
+  .board{
+    background-color: silver;
+    padding: 1rem;
+    border: 1px #660000 solid;
+    background-color: #f4eeee;
+  }
+
+
+}
+
+.details{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
+}
