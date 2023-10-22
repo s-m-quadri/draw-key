@@ -2,54 +2,56 @@ import { Layer, Line, Stage, Text } from "react-konva";
 import { useEffect, useRef, useState } from "react";
 
 import styles from "./dk-common.module.scss";
+import DKPlot from "./graph/dk-plot";
+import { DKLine, DKProcess } from "./dk-algorithm";
+import DKInfo from "./graph/dk-info";
 
 export default function DKCanvas() {
   const [lines, setLines] = useState([]);
-  const isDrawing = useRef(false);
-  const [strokes, setStrokes] = useState([]);
+  const [linesP1, setlinesP1] = useState([]);
+  const [linesP2, setlinesP2] = useState([]);
+  const [dkVectors, setDkVectors] = useState([]);
+  const activatePen = useRef(false);
 
   const handleMouseDown = (e) => {
-    isDrawing.current = true;
+    // Activate Pen
+    activatePen.current = true;
+
+    // Get co-ordinates
     const pos = e.target.getStage().getPointerPosition();
-    setLines([...lines, { points: [pos.x, pos.y] }]);
-    setStrokes([
-      ...strokes,
-      { vector: [[Math.round(pos.x), Math.round(pos.y)]] },
-    ]);
+
+    // Start to capture new line
+    let newLine = new DKLine();
+    newLine.addPoint(pos.x, pos.y);
+    setLines([...lines, newLine]);
   };
 
   const handleMouseMove = (e) => {
-    // no drawing - skipping
-    if (!isDrawing.current) {
+    // Skip, if pen is not activated
+    if (!activatePen.current) {
       return;
     }
 
-    // Get the current location of point
-    const stage = e.target.getStage();
-    const point = stage.getPointerPosition();
+    // Otherwise,
+    // Get co-ordinates
+    const pos = e.target.getStage().getPointerPosition();
 
-    // Add point to the last line (replace last with updates)
-    let lastLine = lines[lines.length - 1];
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
-    lines.splice(lines.length - 1, 1, lastLine);
+    // Add point to the last line
+    lines.at(-1).addPoint(pos.x, pos.y);
     setLines(lines.concat());
-
-    let lastStroke = strokes[strokes.length - 1];
-    lastStroke.vector = [
-      ...lastStroke.vector,
-      [Math.round(point.x), Math.round(point.y)],
-    ];
-    strokes.splice(strokes.length - 1, 1, lastStroke);
-    setStrokes([...strokes]);
   };
 
   const handleMouseUp = () => {
-    isDrawing.current = false;
-    console.log(strokes);
+    activatePen.current = false;
+    let process = new DKProcess(lines.at(-1).points);
+    setlinesP1([...linesP1, process.smoothCurve]);
+    setlinesP2([...linesP2, process.smoothAngles]);
+    setDkVectors([...dkVectors, process.vector]);
   };
 
   return (
     <div>
+      <h2>Draw Signature</h2>
       <div className={styles.canvas}>
         <Stage
           width={globalThis.window?.innerWidth / 2}
@@ -62,44 +64,44 @@ export default function DKCanvas() {
           onTouchMove={handleMouseMove}
           onTouchEnd={handleMouseUp}
         >
-          <Layer>
-            <Text text="Draw Signature" x={5} y={5} />
-            {lines.map((line, i) => (
-              <Line
-                key={i}
-                points={line.points}
-                stroke="#660000"
-                strokeWidth={5}
-                tension={0.5}
-                lineCap="round"
-                lineJoin="round"
-              />
-            ))}
-          </Layer>
+          <DKPlot lines={lines} />
         </Stage>
       </div>
+      <DKInfo lines={lines} />
+
+      <h2>Curve Smoothing</h2>
+      <div className={styles.canvas}>
+        <Stage
+          width={globalThis.window?.innerWidth / 2}
+          height={globalThis.window?.innerHeight / 2}
+          className={styles.board}
+        >
+          <DKPlot lines={linesP1} />
+        </Stage>
+      </div>
+      <DKInfo lines={linesP1} />
+
+      <h2>Angle Smoothing</h2>
+      <div className={styles.canvas}>
+        <Stage
+          width={globalThis.window?.innerWidth / 2}
+          height={globalThis.window?.innerHeight / 2}
+          className={styles.board}
+        >
+          <DKPlot lines={linesP2} />
+        </Stage>
+      </div>
+      <DKInfo lines={linesP2} />
+
+      <h2>Vectors</h2>
       <div className={styles.details}>
-        {strokes.map((stroke, i) => (
-          <details open>
-            <summary>Stroke {i + 1}</summary>
-            <table border={"black"}>
-              <tr>
-                <td>Stroke</td>
-                <td>Point</td>
-                <td>X</td>
-                <td>Y</td>
-              </tr>
-              {stroke.vector.map((point, j) => (
-                <tr>
-                  <td>{i + 1}</td>
-                  <td>{j + 1}</td>
-                  <td>{point[0]}</td>
-                  <td>{point[1]}</td>
-                </tr>
-              ))}
-            </table>
-          </details>
-        ))}
+        <ol>
+          {dkVectors.map((vector, i) => (
+            <li>
+              <code>{`${vector}`}</code>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );
