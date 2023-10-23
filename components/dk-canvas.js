@@ -6,12 +6,16 @@ import DKPlot from "./graph/dk-plot";
 import { DKLine, DKProcess } from "./dk-algorithm";
 import DKInfo from "./graph/dk-info";
 
-export default function DKCanvas() {
-  const [lines, setLines] = useState([]);
+export default function DKCanvas({ handleCompletion, nextLine }) {
+  const [lines, setLines] = useState(nextLine);
   const [linesP1, setlinesP1] = useState([]);
   const [linesP2, setlinesP2] = useState([]);
-  const [dkVectors, setDkVectors] = useState([]);
+  const [vectors, setVectors] = useState([]);
   const activatePen = useRef(false);
+
+  useEffect(() => {
+    processPoint();
+  }, [nextLine]);
 
   const handleMouseDown = (e) => {
     // Activate Pen
@@ -43,11 +47,23 @@ export default function DKCanvas() {
 
   const handleMouseUp = () => {
     activatePen.current = false;
-    let process = new DKProcess(lines.at(-1).points);
-    setlinesP1([...linesP1, process.smoothCurve]);
-    setlinesP2([...linesP2, process.smoothAngles]);
-    setDkVectors([...dkVectors, process.vector]);
+    processPoint();
   };
+
+  function processPoint() {
+    let mLinesP1 = [],
+      mLinesP2 = [],
+      mVectors = [];
+    lines.map((line, i) => {
+      let process = new DKProcess(line.points);
+      mLinesP1 = [...mLinesP1, process.smoothCurve];
+      mLinesP2 = [...mLinesP2, process.smoothAngles];
+      mVectors = [...mVectors, process.vector];
+    });
+    setlinesP1(mLinesP1);
+    setlinesP2(mLinesP2);
+    setVectors(mVectors);
+  }
 
   return (
     <div>
@@ -96,13 +112,16 @@ export default function DKCanvas() {
       <h2>Vectors</h2>
       <div className={styles.details}>
         <ol>
-          {dkVectors.map((vector, i) => (
+          {vectors.map((vector, i) => (
             <li>
               <code>{`${vector}`}</code>
             </li>
           ))}
         </ol>
       </div>
+
+      <button onClick={() => handleCompletion("Prev", lines)}>Prev</button>
+      <button onClick={() => handleCompletion("Next", lines)}>Next</button>
     </div>
   );
 }
