@@ -120,8 +120,12 @@ export default function DKCanvas({ handleCompletion, nextLine }) {
         </ol>
       </div>
 
-      <button onClick={() => handleCompletion("Prev", lines)}>Prev</button>
-      <button onClick={() => handleCompletion("Next", lines)}>Next</button>
+      <button onClick={() => handleCompletion("Prev", lines, vectors)}>
+        Prev
+      </button>
+      <button onClick={() => handleCompletion("Next", lines, vectors)}>
+        Next
+      </button>
     </div>
   );
 }

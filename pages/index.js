@@ -43,21 +43,17 @@ function Home() {
 }
 
 function Screen() {
-  const [signatures, setSignatures] = useState({
-    1: [],
-    2: [],
-    3: [],
-  });
-  const [attempt, setAttempt] = useState(1);
-  const [canvas, setCanvas] = useState(
-    <DKCanvas key={attempt} handleCompletion={handleCompletion} />
-  );
+  const [signatures, setSignatures] = useState(Array(4).fill([]));
+  const [signVector, setSignVector] = useState(Array(4).fill([]));
 
-  function handleCompletion(action, lines) {
+  const [attempt, setAttempt] = useState(1);
+
+  function handleCompletion(action, lines, vector) {
     // Store current attempt as history
-    signatures[attempt] = lines;
+    signatures[attempt - 1] = lines;
     setSignatures(signatures);
-    console.log(signatures);
+    signVector[attempt - 1] = vector;
+    setSignVector(signVector);
 
     // Calculate next attempt based on action
     let next_attempt = 0;
@@ -77,14 +73,30 @@ function Screen() {
     setAttempt(next_attempt);
   }
 
-  return attempt <= 3 ? (
+  return attempt <= 4 ? (
     <DKCanvas
       key={attempt}
       handleCompletion={handleCompletion}
-      nextLine={signatures[attempt]}
+      nextLine={signatures[attempt - 1]}
     />
   ) : (
-    <h1>Success</h1>
+    <DKResult reference={signVector} />
+  );
+}
+
+function DKResult({ reference }) {
+  return (
+    <>
+      <h1>Success</h1>
+      <h2>Vectors</h2>
+      {reference.map((signature, si) =>
+        signature.map((vector, vi) => (
+          <p key={vi}>
+            Sign: {si + 1}: #{vi + 1} {`${vector}`}
+          </p>
+        ))
+      )}
+    </>
   );
 }
 

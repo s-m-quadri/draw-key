@@ -33,7 +33,7 @@ export class DKLine {
 }
 
 export class DKProcess {
-  constructor(points = [], pointTolerance = 5, angleTolerance = 45) {
+  constructor(points = [], pointTolerance = 5, angleTolerance = 15) {
     // Configuration
     this.points = points;
     this.pointTolerance = pointTolerance;
