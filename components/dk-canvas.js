@@ -2,8 +2,9 @@ import { Layer, Line, Stage, Text } from "react-konva";
 import { useEffect, useRef, useState } from "react";
 
 import styles from "./dk-common.module.scss";
+import DKLine from "../algorithms/dk-line";
+import DKSmooth from "../algorithms/dk-smooth";
 import DKPlot from "./graph/dk-plot";
-import { DKLine, DKProcess } from "./dk-algorithm";
 import DKInfo from "./graph/dk-info";
 
 export default function DKCanvas({ handleCompletion, nextLine }) {
@@ -55,7 +56,7 @@ export default function DKCanvas({ handleCompletion, nextLine }) {
       mLinesP2 = [],
       mVectors = [];
     lines.map((line, i) => {
-      let process = new DKProcess(line.points);
+      let process = new DKSmooth(line.points);
       mLinesP1 = [...mLinesP1, process.smoothCurve];
       mLinesP2 = [...mLinesP2, process.smoothAngles];
       mVectors = [...mVectors, process.vector];
