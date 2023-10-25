@@ -1,8 +1,7 @@
 import DKGraph from "../graph/dk-graph";
 import { useState } from "react";
-import { DKScreenResult } from "./dk-screen-result";
 
-export default function DKScreenRegister() {
+export default function DKScreenRegister({ handleRegCompletion }) {
   const [allLines, setAllLines] = useState(Array(4).fill([]));
   const [allVectors, setAllVectors] = useState(Array(4).fill([]));
 
@@ -32,14 +31,15 @@ export default function DKScreenRegister() {
     // Proceed to next attempt
     setAttempt(next_attempt);
   }
-
-  return attempt <= 4 ? (
-    <DKGraph
-      key={attempt}
-      handleCompletion={handleCompletion}
-      nextLine={allLines[attempt - 1]}
-    />
-  ) : (
-    <DKScreenResult reference={allVectors} />
-  );
+  if (attempt <= 3) {
+    return (
+      <DKGraph
+        key={attempt}
+        handleCompletion={handleCompletion}
+        nextLine={allLines[attempt - 1]}
+      />
+    );
+  } else {
+    handleRegCompletion(allVectors);
+  }
 }

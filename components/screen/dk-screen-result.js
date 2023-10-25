@@ -1,4 +1,4 @@
-export function DKScreenResult({ reference }) {
+export default function DKScreenResult({ reference }) {
   return (
     <>
       <h1>Success</h1>

@@ -1,7 +1,7 @@
 import { Layer, Line, Stage, Text } from "react-konva";
 import { useEffect, useRef, useState } from "react";
 
-import styles from "./dk-common.module.scss";
+import styles from "../dk-common.module.scss";
 import DKLine from "../../algorithms/dk-line";
 import DKSmooth from "../../algorithms/dk-smooth";
 import DKGraphPlot from "./dk-graph-plot";
@@ -86,47 +86,50 @@ export default function DKGraph({ handleCompletion, nextLine }) {
       </div>
       <DKGraphInfo lines={lines} />
 
-      <h2>Curve Smoothing</h2>
-      <div className={styles.canvas}>
-        <Stage
-          width={globalThis.window?.innerWidth / 2}
-          height={globalThis.window?.innerHeight / 2}
-          className={styles.board}
-        >
-          <DKGraphPlot lines={linesP1} />
-        </Stage>
-      </div>
-      <DKGraphInfo lines={linesP1} />
-
-      <h2>Angle Smoothing</h2>
-      <div className={styles.canvas}>
-        <Stage
-          width={globalThis.window?.innerWidth / 2}
-          height={globalThis.window?.innerHeight / 2}
-          className={styles.board}
-        >
-          <DKGraphPlot lines={linesP2} />
-        </Stage>
-      </div>
-      <DKGraphInfo lines={linesP2} />
-
-      <h2>Vectors</h2>
-      <div className={styles.details}>
-        <ol>
-          {vectors.map((vector, i) => (
-            <li>
-              <code>{`${vector}`}</code>
-            </li>
-          ))}
-        </ol>
-      </div>
-
       <button onClick={() => handleCompletion("Prev", lines, vectors)}>
         Prev
       </button>
       <button onClick={() => handleCompletion("Next", lines, vectors)}>
         Next
       </button>
+
+      <details>
+        <summary>Debug Info...</summary>
+        <h2>Curve Smoothing</h2>
+        <div className={styles.canvas}>
+          <Stage
+            width={globalThis.window?.innerWidth / 2}
+            height={globalThis.window?.innerHeight / 2}
+            className={styles.board}
+          >
+            <DKGraphPlot lines={linesP1} />
+          </Stage>
+        </div>
+        <DKGraphInfo lines={linesP1} />
+
+        <h2>Angle Smoothing</h2>
+        <div className={styles.canvas}>
+          <Stage
+            width={globalThis.window?.innerWidth / 2}
+            height={globalThis.window?.innerHeight / 2}
+            className={styles.board}
+          >
+            <DKGraphPlot lines={linesP2} />
+          </Stage>
+        </div>
+        <DKGraphInfo lines={linesP2} />
+
+        <h2>Vectors</h2>
+        <div className={styles.details}>
+          <ol>
+            {vectors.map((vector, i) => (
+              <li>
+                <code>{`${vector}`}</code>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </details>
     </div>
   );
 }
