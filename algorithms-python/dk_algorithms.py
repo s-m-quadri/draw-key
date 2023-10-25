@@ -26,21 +26,24 @@ def main():
         print("Invalid length!")
 
 
-def get_cost(vec1, vec2):
+def get_cost(vec1: list[int], vec2: list[int]) -> int:
+    """Calculates and returns the cost of two equal-length vector"""
     if len(vec1) != len(vec2) or not len(vec1) > 0:
         raise ValueError("Invalid length of vector to calculate cost.")
 
     cost = 0
     for i in range(len(vec1)):
         cost += abs(vec1[i] - vec2[i])
-    return cost
+    return round(cost)
 
 
-def get_mean(data_points):
+def get_mean(data_points: list[int]) -> int:
+    """Get the mean for given data points"""
     return round(sum(data_points) / len(data_points))
 
 
-def get_variance(data_points):
+def get_variance(data_points: list[int]) -> int:
+    """Get the variance for given data points"""
     mean = get_mean(data_points)
     variance = 0
     for point in data_points:
@@ -48,38 +51,41 @@ def get_variance(data_points):
     return round(variance / len(data_points))
 
 
-def get_std_deviation(data_points):
+def get_std_deviation(data_points: list[int]) -> int:
+    """Get the standard deviation for given data points"""
     return round(math.sqrt(get_variance(data_points)))
 
 
 class Match:
-    def __init__(self, v1, v2, target) -> None:
-        self.v1 = v1
-        self.v2 = v2
+    def __init__(self, v1: list[int], v2: list[int], target: int) -> None:
         self.target = target
-        self.res_cost = float("inf")
-        self.res_match = []
+        self.res_cost = 2**16
+        self.res_match = list[list[int], list[int]]
         self.explored_vec = []
-        self.calculate_best_match(self.v1, self.v2)
+        self.calculate_best_match(v1, v2)
 
-    def calculate_best_match(self, vec1, vec2, p1=0, p2=0):
-        # print(vec1, p1, vec2, p2, self.res_match, self.res_cost)
+    def calculate_best_match(
+        self, vec1: list[int], vec2: list[int], p1=0, p2=0
+    ) -> None:
+        """Shrinks both vectors, and modifies self.res... props based on the target array and cost function"""
+        # Not to ignore already completed steps
         if (vec1, vec2, p1, p2) in self.explored_vec:
             return
         else:
             self.explored_vec.append((vec1, vec2, p1, p2))
 
+        # Pointers reached at the target
         if p1 == p2 == self.target - 1:
             cur_cost = get_cost(vec1[: p1 + 1], vec2[: p2 + 1])
             if cur_cost < self.res_cost:
                 self.res_cost = cur_cost
                 self.res_match = (vec1[: p1 + 1], vec2[: p2 + 1])
-                # print(self.res_cost, self.res_match)
 
         # Consider to take from first vector
         if p1 + 1 < self.target:
             self.calculate_best_match(vec1, vec2, p1 + 1, p2)
 
+        # Consider to ignore from first vector
         if len(vec1) > self.target:
             self.calculate_best_match(vec1[1:], vec2, p1, p2)
 
@@ -87,13 +93,12 @@ class Match:
         if p2 + 1 < self.target:
             self.calculate_best_match(vec1, vec2, p1, p2 + 1)
 
+        # Consider to ignore from second vector
         if len(vec2) > self.target:
             self.calculate_best_match(vec1, vec2[1:], p1, p2)
 
-        return
 
-
-def getTemplate(ref_signs: list(list())):
+def getTemplate(ref_signs: list[list[int]]) -> dict:
     # Length tolerance calculation
     ln_ref_signs = [len(sign) for sign in ref_signs]
     mean = get_mean(ln_ref_signs)
@@ -125,184 +130,3 @@ def getTemplate(ref_signs: list(list())):
 
 if __name__ == "__main__":
     main()
-
-# def getBestMatch(vec1, vec2, shrink):
-#     print(vec1, vec2)
-#     connections = []
-#     for i1, v1 in enumerate(vec1):
-#         for i2, v2 in enumerate(vec2):
-#             connections.append({"index1": i1, "value1":v1, "index2":i2, "value2": v2, "cost": abs(v1-v2)})
-
-#     connections.sort(key= lambda x: x["cost"], reverse=True)
-
-#     print(f"{connections=}", end="\n\n")
-
-#     new_connections = []
-#     while connections:
-#         arc = connections[0]
-#         if not isSignificant(connections, arc["index1"], arc["index2"], shrink):
-#             connections.remove(arc)
-#             continue
-
-#         new_connections.append(arc)
-#         print ("++ Add ", arc)
-
-#         i1 = arc["index1"]
-#         i2 = arc["index2"]
-#         for rm_arc in connections[:]:
-#             if rm_arc["index1"] == i1 or rm_arc["index2"] == i2:
-#                 connections.remove(rm_arc)
-#                 print ("-- Remove ", rm_arc)
-
-#     for arc in new_connections:
-#         print(f"{arc=}", end="\n\n")
-
-#     # print(isSignificant(connections, connections[0]["index1"], connections[0]["index2"], shrink))
-
-# def isSignificant(connections, i1, i2, shrink):
-#     count_i1 = 0
-#     count_i2 = 0
-#     total_cost = 0
-#     for arc in connections:
-#         if arc["index1"] == i1:
-#             count_i1 += 1
-#         if arc["index2"] == i2:
-#             count_i2 += 1
-#     print(f"{count_i1=}, {count_i2=}")
-#     if count_i1 <= shrink or count_i2 <= shrink:
-#         return True
-
-
-# def getBestMatchV2(vec1, vec2, ln_final, final_vec = [], cost = 0):
-#     print("call ",vec1, vec2, final_vec, "cost: ", cost)
-
-#     if len(final_vec) == ln_final:
-#         return final_vec, cost
-
-#     if len(vec1) == 0 and len(vec2) == 0:
-#         return None
-
-#     # print(getCost(vec1, vec2))
-
-#     results = []
-
-#     # Consider to take from first vector
-#     if len(vec1) >= 1:
-#         results.append(getBestMatchV2(vec1[1:], vec2[:], ln_final, final_vec + [vec1[0]], cost + abs(vec1[0] - 0)))
-
-#     # Consider to take from second vector
-#     if len(vec2) >= 1:
-#         results.append(getBestMatchV2(vec1[:], vec2[1:], ln_final, final_vec + [vec2[0]], cost + abs(0 - vec2[0])))
-
-#     # Consider to take from both vector
-#     # Consider to just ignore
-#     if len(vec1) >= 1 and len(vec2) >= 1:
-#         results.append(getBestMatchV2(vec1[1:], vec2[1:], ln_final, final_vec + [round((vec1[0] + vec2[0])/2)], cost + abs(vec1[0] - vec2[0])))
-#         results.append(getBestMatchV2(vec1[1:], vec2[1:], ln_final, final_vec, cost + 0))
-
-
-#     possible = []
-#     for match_vec in results:
-#         if match_vec:
-#             possible.append(match_vec)
-
-#     print(possible)
-#     possible.sort(key=lambda x: x[1])
-#     print(f"{possible[0]=}")
-
-#     return possible[0]
-
-
-# def getBestMatch(vec1, vec2, ln_final, f1=[], f2=[]):
-#     # print("call ", vec1, vec2, f1, f2)
-#     global known_min
-
-#     if len(f1) == len(f2) == ln_final:
-#         if getCost(f1, f2) >= known_min:
-#             return None
-#         return f1, f2
-
-#     if len(vec1) == 0 and len(vec2) == 0:
-#         return None
-
-#     if len(f1) > ln_final or len(f2) > ln_final:
-#         return None
-
-#     if len(vec1) + len(f1) < ln_final and len(vec2) + len(f2) < ln_final:
-#         return None
-
-#     results = []
-
-#     # Consider to take from first vector
-#     if len(vec1) >= 1 and len(f1) < ln_final:
-#         results.append(getBestMatch(vec1[1:], vec2, ln_final, f1 + [vec1[0]], f2))
-#         results.append(getBestMatch(vec1[1:], vec2, ln_final, f1, f2))
-
-#     # Consider to take from second vector
-#     if len(vec2) >= 1 and len(f2) < ln_final:
-#         results.append(getBestMatch(vec1, vec2[1:], ln_final, f1, f2 + [vec2[0]]))
-#         results.append(getBestMatch(vec1, vec2[1:], ln_final, f1, f2))
-
-#     possible = []
-#     for match_vec in results:
-#         if match_vec:
-#             possible.append(match_vec)
-
-#     # print(f"{possible=}")
-#     # print(f"{possible[0][:2]=}")
-#     # possible.sort(key=lambda x: getCost(x[:2]))
-
-#     # print(f"{possible[0]=}")
-#     if possible:
-#         if getCost(*possible[0]) < known_min:
-#             known_min = getCost(*possible[0])
-#             global known_best_match
-#             known_best_match = possible[0]
-#             # return possible[0]
-
-#     # return possible[0] if possible else None
-#     return known_best_match
-
-
-# def getBestMatch(vec1, vec2, target, p1=0, p2=0):
-#     # print("call ", vec1, vec2, f1, f2)
-#     global known_min
-
-#     if len(vec1) == len(vec2) == target:
-#         if getCost(vec1, vec2) >= known_min:
-#             return None
-#         return vec1, vec2
-
-#     if len(vec1) < target or len(vec2) < target:
-#         return None
-
-#     results = []
-
-#     # Consider to take from first vector
-#     if p1 <= target - 2:
-#         results.append(getBestMatch(vec1, vec2, target, p1 + 1, p2))
-
-#     if len(vec1) >= 1:
-#         results.append(getBestMatch(vec1[1:], vec2, target, p1, p2))
-
-#     # Consider to take from second vector
-#     if p2 <= target - 2:
-#         results.append(getBestMatch(vec1, vec2, target, p1, p2 + 1))
-
-#     if len(vec2) >= 1:
-#         results.append(getBestMatch(vec1, vec2[1:], target, p1, p2))
-
-#     if possible := [x for x in results if x]:
-#         # print(f"{possible=}")
-#         # print(f"{possible[0][:2]=}")
-#         # possible.sort(key=lambda x: getCost(x[:2]))
-
-#         # print(f"{possible[0]=}")
-#         if getCost(*possible[0]) < known_min:
-#             known_min = getCost(*possible[0])
-#             global known_best_match
-#             known_best_match = possible[0]
-#             # return possible[0]
-
-#     # return possible[0] if possible else None
-#     return known_best_match
