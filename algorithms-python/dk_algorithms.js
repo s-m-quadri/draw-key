@@ -121,22 +121,28 @@ function getStdDeviation(dataPoints) {
   return Math.round(stdDeviation);
 }
 
-function getTemplate(refSigns) {
+/**
+ * Get the dict like object, a complete info for templates, to be used
+ * as passwords, but without hashing, since it will again required in
+ * actual format at the time of validation of vector - a part of signature
+ * @param {Arrays} refVectors
+ */
+export function getTemplate(refVectors) {
   // Length tolerance calculation
-  const lnRefSigns = refSigns.map((sign) => sign.length);
+  const lnRefSigns = refVectors.map((sign) => sign.length);
   const stdDeviation = getStdDeviation(lnRefSigns);
 
   const minLn = Math.min(...lnRefSigns) - stdDeviation;
   const maxLn = Math.max(...lnRefSigns) + stdDeviation;
 
-  var resVec = refSigns[0];
-  for (let i = 1; i < refSigns.length; i++) {
-    const nextVec = refSigns[i];
+  var resVec = refVectors[0];
+  for (let i = 1; i < refVectors.length; i++) {
+    const nextVec = refVectors[i];
     const [v1, v2] = getBestMatch(resVec, nextVec, minLn).resMatch;
     resVec = v1.map((x, k) => Math.round((x + v2[k]) / 2));
   }
   var costs = [];
-  for (const i of refSigns) {
+  for (const i of refVectors) {
     let new_cost = getBestMatch(i, resVec, minLn);
     costs = [...costs, new_cost.resCost];
   }
@@ -154,7 +160,13 @@ function getTemplate(refSigns) {
   };
 }
 
-function isValidate(template, input) {
+/**
+ * Validate the given signature as input, with reference to the template.
+ * @param {Dict} template 	template obtained via getTemplate
+ * @param {Arrays} input 	input vector, an array of integers of theta values
+ * @returns true or false
+ */
+export function isValidate(template, input) {
   // Check if the test sign is valid
   const x = getBestMatch(template.vector, input, template.lengthMin).resCost;
   if (template.lengthMin <= input.length <= template.lengthMax)
