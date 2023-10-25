@@ -1,6 +1,6 @@
 import styles from "../dk-common.module.scss";
 
-export default function DKInfo({ lines }) {
+export default function DKGraphInfo({ lines }) {
   return (
     <>
       <div className={styles.details}>

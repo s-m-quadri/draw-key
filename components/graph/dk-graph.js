@@ -2,12 +2,12 @@ import { Layer, Line, Stage, Text } from "react-konva";
 import { useEffect, useRef, useState } from "react";
 
 import styles from "./dk-common.module.scss";
-import DKLine from "../algorithms/dk-line";
-import DKSmooth from "../algorithms/dk-smooth";
-import DKPlot from "./graph/dk-plot";
-import DKInfo from "./graph/dk-info";
+import DKLine from "../../algorithms/dk-line";
+import DKSmooth from "../../algorithms/dk-smooth";
+import DKGraphPlot from "./dk-graph-plot";
+import DKGraphInfo from "./dk-graph-info";
 
-export default function DKCanvas({ handleCompletion, nextLine }) {
+export default function DKGraph({ handleCompletion, nextLine }) {
   const [lines, setLines] = useState(nextLine);
   const [linesP1, setlinesP1] = useState([]);
   const [linesP2, setlinesP2] = useState([]);
@@ -81,10 +81,10 @@ export default function DKCanvas({ handleCompletion, nextLine }) {
           onTouchMove={handleMouseMove}
           onTouchEnd={handleMouseUp}
         >
-          <DKPlot lines={lines} />
+          <DKGraphPlot lines={lines} />
         </Stage>
       </div>
-      <DKInfo lines={lines} />
+      <DKGraphInfo lines={lines} />
 
       <h2>Curve Smoothing</h2>
       <div className={styles.canvas}>
@@ -93,10 +93,10 @@ export default function DKCanvas({ handleCompletion, nextLine }) {
           height={globalThis.window?.innerHeight / 2}
           className={styles.board}
         >
-          <DKPlot lines={linesP1} />
+          <DKGraphPlot lines={linesP1} />
         </Stage>
       </div>
-      <DKInfo lines={linesP1} />
+      <DKGraphInfo lines={linesP1} />
 
       <h2>Angle Smoothing</h2>
       <div className={styles.canvas}>
@@ -105,10 +105,10 @@ export default function DKCanvas({ handleCompletion, nextLine }) {
           height={globalThis.window?.innerHeight / 2}
           className={styles.board}
         >
-          <DKPlot lines={linesP2} />
+          <DKGraphPlot lines={linesP2} />
         </Stage>
       </div>
-      <DKInfo lines={linesP2} />
+      <DKGraphInfo lines={linesP2} />
 
       <h2>Vectors</h2>
       <div className={styles.details}>

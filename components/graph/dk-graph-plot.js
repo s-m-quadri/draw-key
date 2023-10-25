@@ -1,6 +1,6 @@
 import { Layer, Line, Text } from "react-konva";
 
-export default function DKPlot({
+export default function DKGraphPlot({
   lines,
   strokeColor = "#660000",
   title = "Draw Signature",
