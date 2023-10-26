@@ -170,7 +170,7 @@ export function isValidate(template, input) {
   // Check if the test sign is valid
   const x = getBestMatch(template.vector, input, template.lengthMin).resCost;
   if (template.lengthMin <= input.length <= template.lengthMax)
-    if (template.costMin <= x <= template.costMax) return true;
+    if (x <= template.costMax) return true;
   return false;
 }
 
