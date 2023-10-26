@@ -2,8 +2,8 @@ import DKGraph from "../graph/dk-graph";
 import { useState } from "react";
 
 export default function DKScreenRegister({ handleRegCompletion }) {
-  const [allLines, setAllLines] = useState(Array(4).fill([]));
-  const [allVectors, setAllVectors] = useState(Array(4).fill([]));
+  const [allLines, setAllLines] = useState(Array(3).fill([]));
+  const [allVectors, setAllVectors] = useState(Array(3).fill([]));
 
   const [attempt, setAttempt] = useState(1);
 
@@ -37,6 +37,7 @@ export default function DKScreenRegister({ handleRegCompletion }) {
         key={attempt}
         handleCompletion={handleCompletion}
         nextLine={allLines[attempt - 1]}
+        title={`Draw Signature to Register (${attempt}/3)`}
       />
     );
   } else {

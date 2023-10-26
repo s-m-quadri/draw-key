@@ -7,7 +7,7 @@ import DKSmooth from "../../algorithms/dk-smooth";
 import DKGraphPlot from "./dk-graph-plot";
 import DKGraphInfo from "./dk-graph-info";
 
-export default function DKGraph({ handleCompletion, nextLine }) {
+export default function DKGraph({ handleCompletion, nextLine, title }) {
   const [lines, setLines] = useState(nextLine);
   const [linesP1, setlinesP1] = useState([]);
   const [linesP2, setlinesP2] = useState([]);
@@ -81,7 +81,7 @@ export default function DKGraph({ handleCompletion, nextLine }) {
           onTouchMove={handleMouseMove}
           onTouchEnd={handleMouseUp}
         >
-          <DKGraphPlot lines={lines} />
+          <DKGraphPlot lines={lines} title={title} />
         </Stage>
       </div>
       <DKGraphInfo lines={lines} />
