@@ -55,15 +55,18 @@ export default function DKScreen() {
         <Button variant="outlined" onClick={() => gotoRegister()}>
           Register
         </Button>
-        <Button variant="outlined" onClick={() => gotoLogin()}>
+        <Button variant="contained" onClick={() => gotoLogin()}>
           Login
         </Button>
-        <DKScreenResult
-          references={allReference}
-          input={inputVectors}
-          allTemplate={allTemplate}
-          allStatus={allStatus}
-        />
+        <details>
+          <summary>Current State</summary>
+          <DKScreenResult
+            references={allReference}
+            input={inputVectors}
+            allTemplate={allTemplate}
+            allStatus={allStatus}
+          />
+        </details>
       </>
     ),
     register: <DKScreenRegister handleRegCompletion={handleRegCompletion} />,

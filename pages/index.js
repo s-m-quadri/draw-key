@@ -2,10 +2,7 @@ import ContentLoader, { List } from "react-content-loader";
 import Layout from "../components/layout";
 import Head from "next/head";
 import DKScreen from "../components/screen/dk-screen";
-
-function Header({ title }) {
-  return <h1 align="center">{title ? title : "Untitled"}</h1>;
-}
+import { Typography } from "@mui/material";
 
 function Home() {
   return (
@@ -21,7 +18,12 @@ function Home() {
           </ContentLoader>
         </center>
 
-        <Header title="Draw Key | Signature Authentication" />
+        <Typography variant="h1" align="center">
+          Draw Key
+        </Typography>
+        <Typography variant="h2" align="center">
+          Signature Authentication
+        </Typography>
 
         <center>
           <ContentLoader width="50em">
@@ -29,7 +31,9 @@ function Home() {
           </ContentLoader>
         </center>
 
-        <DKScreen />
+        <center>
+          <DKScreen />
+        </center>
 
         <center>
           <ContentLoader width="50em">

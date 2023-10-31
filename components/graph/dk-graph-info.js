@@ -1,3 +1,11 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import styles from "../dk-common.module.scss";
 
 export default function DKGraphInfo({ lines }) {
@@ -7,24 +15,31 @@ export default function DKGraphInfo({ lines }) {
         {lines.map((line, i) => (
           <details>
             <summary>Stroke {i + 1}</summary>
-            <table border={"black"}>
-              <tr>
-                <td>Stroke</td>
-                <td>Point</td>
-                <td>X</td>
-                <td>Y</td>
-                <td>Theta</td>
-              </tr>
-              {line.points.map((point, j) => (
-                <tr>
-                  <td>{i + 1}</td>
-                  <td>{j + 1}</td>
-                  <td>{point.x}</td>
-                  <td>{point.y}</td>
-                  <td>{point.theta}</td>
-                </tr>
-              ))}
-            </table>
+
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Stroke</TableCell>
+                    <TableCell>Point</TableCell>
+                    <TableCell>X</TableCell>
+                    <TableCell>Y</TableCell>
+                    <TableCell>Theta</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {line.points.map((point, j) => (
+                    <TableRow>
+                      <TableCell>{i + 1}</TableCell>
+                      <TableCell>{j + 1}</TableCell>
+                      <TableCell>{point.x}</TableCell>
+                      <TableCell>{point.y}</TableCell>
+                      <TableCell>{point.theta}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </details>
         ))}
       </div>

@@ -6,6 +6,8 @@ import DKLine from "../../algorithms/dk-line";
 import DKSmooth from "../../algorithms/dk-smooth";
 import DKGraphPlot from "./dk-graph-plot";
 import DKGraphInfo from "./dk-graph-info";
+import { Button, Grid, IconButton, Paper, Typography } from "@mui/material";
+import { Refresh } from "@mui/icons-material";
 
 export default function DKGraph({ handleCompletion, nextLine, title }) {
   const [lines, setLines] = useState(nextLine);
@@ -75,7 +77,7 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
 
   return (
     <div>
-      <h2>Draw Signature</h2>
+      <Typography variant="h2">Draw Signature</Typography>
       <div className={styles.canvas}>
         <Stage
           width={globalThis.window?.innerWidth / 2}
@@ -92,18 +94,27 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
         </Stage>
       </div>
 
-      <button onClick={() => handleReset()}>Reset</button>
+      <IconButton onClick={() => handleReset()}>
+        <Refresh />
+      </IconButton>
 
-      <button onClick={() => handleCompletion("Prev", lines, vectors)}>
+      <Button
+        variant="outlined"
+        onClick={() => handleCompletion("Prev", lines, vectors)}
+      >
         Back
-      </button>
-      <button onClick={() => handleCompletion("Next", lines, vectors)}>
+      </Button>
+
+      <Button
+        variant="contained"
+        onClick={() => handleCompletion("Next", lines, vectors)}
+      >
         Continue
-      </button>
+      </Button>
 
       <details>
         <summary>Signature Vector(s)</summary>
-        <h2>Vectors</h2>
+        <Typography variant="h2">Vectors</Typography>
         <div className={styles.details}>
           <ol>
             {vectors.map((vector, i) => (
@@ -117,7 +128,7 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
 
       <details>
         <summary>Processing Details</summary>
-        <h2>Original Signature</h2>
+        <Typography variant="h2">Original Signature</Typography>
         <div className={styles.canvas}>
           <Stage
             width={globalThis.window?.innerWidth / 2}
@@ -135,7 +146,7 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
         </div>
         <DKGraphInfo lines={lines} />
 
-        <h2>Curve Smoothing</h2>
+        <Typography variant="h2">Curve Smoothing</Typography>
         <div className={styles.canvas}>
           <Stage
             width={globalThis.window?.innerWidth / 2}
@@ -147,7 +158,7 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
         </div>
         <DKGraphInfo lines={linesP1} />
 
-        <h2>Angle Smoothing</h2>
+        <Typography variant="h2">Angle Smoothing</Typography>
         <div className={styles.canvas}>
           <Stage
             width={globalThis.window?.innerWidth / 2}

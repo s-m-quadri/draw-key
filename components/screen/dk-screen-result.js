@@ -18,9 +18,7 @@ export default function DKScreenResult({
   console.log("References");
   console.log(references);
   return (
-    <Grid container spacing={0}>
-      <Typography variant="h1">Results Page</Typography>
-
+    <>
       <Typography variant="h2">Reference Vectors</Typography>
       <TableContainer>
         <Table size="small">
@@ -92,6 +90,6 @@ export default function DKScreenResult({
           </TableBody>
         </Table>
       </TableContainer>
-    </Grid>
+    </>
   );
 }
