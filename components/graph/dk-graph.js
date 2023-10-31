@@ -92,10 +92,10 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
         </Stage>
       </div>
 
-      <button onClick={() => handleReset()}>Reset Drawing</button>
+      <button onClick={() => handleReset()}>Reset</button>
 
       <button onClick={() => handleCompletion("Prev", lines, vectors)}>
-        Go Back
+        Back
       </button>
       <button onClick={() => handleCompletion("Next", lines, vectors)}>
         Continue

@@ -1,75 +1,97 @@
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+
 export default function DKScreenResult({
   references,
   allTemplate,
   input,
   allStatus,
 }) {
+  console.log("References");
+  console.log(references);
   return (
-    <>
-      <h1>Results Page</h1>
-      <h2>Reference Vectors</h2>
-      {references.map((signature, si) => (
-        <table key={si} border={"black"}>
-          <tr>
-            <td>Sign: {si + 1}</td>
-          </tr>
-          {signature.map((vector, vi) => (
-            <tr>
-              <td>Vector {vi + 1}</td>
-              <td>{`${vector}`}</td>
-            </tr>
-          ))}
-        </table>
-      ))}
+    <Grid container spacing={0}>
+      <Typography variant="h1">Results Page</Typography>
 
-      <h2>Input Vector</h2>
-      <table border={"black"}>
-        {input.map((vector, vi) => (
-          <tr>
-            <td>Vector {vi + 1}</td>
-            <td>{`${vector}`}</td>
-          </tr>
-        ))}
-      </table>
+      <Typography variant="h2">Reference Vectors</Typography>
+      <TableContainer>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Sr.no.</TableCell>
+              <TableCell>Vector</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {references.map((signature, si) => {
+              return signature.map((vector, vi) => (
+                <TableRow key={si * vi}>
+                  <TableCell>{vi + 1}</TableCell>
+                  <TableCell>{`${vector}`}</TableCell>
+                </TableRow>
+              ));
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-      <h2>Template</h2>
-      {allTemplate.map((template, i) => (
-        <table key={i} border={"black"}>
-          <tr>
-            <td>Vector {i + 1}</td>
-          </tr>
-          <tr>
-            <td>Minimum Cost</td>
-            <td>{template.costMin}</td>
-          </tr>
-          <tr>
-            <td>Maximum Cost</td>
-            <td>{template.costMax}</td>
-          </tr>
-          <tr>
-            <td>Minimum Length</td>
-            <td>{template.lengthMin}</td>
-          </tr>
-          <tr>
-            <td>Maximum Length</td>
-            <td>{template.lengthMax}</td>
-          </tr>
-          <tr>
-            <td>Vector</td>
-            <td>{`${template.vector}`}</td>
-          </tr>
-        </table>
-      ))}
+      <Typography variant="h2">Template</Typography>
+      <TableContainer>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Sr. no.</TableCell>
+              <TableCell>Minimum Cost</TableCell>
+              <TableCell>Maximum Cost</TableCell>
+              <TableCell>Minimum Length</TableCell>
+              <TableCell>Maximum Length</TableCell>
+              <TableCell>Vector</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {allTemplate.map((template, i) => (
+              <TableRow key={i}>
+                <TableCell>{i + 1}</TableCell>
+                <TableCell>{template.costMin}</TableCell>
+                <TableCell>{template.costMax}</TableCell>
+                <TableCell>{template.lengthMin}</TableCell>
+                <TableCell>{template.lengthMax}</TableCell>
+                <TableCell>{`${template.vector}`}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-      <h2>Status</h2>
-      <table border={"black"}>
-        {allStatus.map((status, i) => (
-          <tr key={i}>
-            <td>Vector {i + 1}</td>
-            <td>{`${status}`}</td>
-          </tr>
-        ))}
-      </table>
-    </>
+      <Typography variant="h2">Status</Typography>
+      <TableContainer>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Sr. no.</TableCell>
+              <TableCell>Vector</TableCell>
+              <TableCell>Is Verified</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {allStatus.map((status, i) => (
+              <TableRow key={i}>
+                <TableCell>{i + 1}</TableCell>
+                <TableCell>{`${input[i]}`}</TableCell>
+                <TableCell>{`${status}`}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Grid>
   );
 }

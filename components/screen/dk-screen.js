@@ -3,11 +3,14 @@ import DKScreenRegister from "./dk-screen-register";
 import DKScreenResult from "./dk-screen-result";
 import DKScreenLogin from "./dk-screen-login";
 import { getTemplate, isValidate } from "../../algorithms/dk-vectors";
+import { Button } from "@mui/material";
 
 export default function DKScreen() {
   const [allTemplate, setAllTemplate] = useState([]);
   const [allStatus, setAllStatus] = useState([]);
   var [allReference, setAllReference] = useState([]);
+  const [inputVectors, setInputVector] = useState([]);
+  const [curPage, setCurPage] = useState("home");
 
   function handleRegCompletion(allVectors) {
     // if (allVectors) setScreen(<DKScreenResult reference={allVectors} />);
@@ -27,37 +30,57 @@ export default function DKScreen() {
     console.log(allVectors);
     console.log(allTemplate);
 
-    setScreen(<DKScreenLogin handleLoginCompletion={handleLoginCompletion} />);
+    gotoHome();
   }
 
   function handleLoginCompletion(vectors) {
     if (!vectors) return;
-    setScreen("Processing ... ");
-
-    console.log("dall");
 
     console.log(allReference);
+    setInputVector(vectors);
 
+    let status = [];
     for (let i = 0; i < allTemplate.length; i++) {
-      let status = isValidate(allTemplate[i], vectors[i]);
-      allStatus.push(status);
-      setAllStatus(allStatus);
-      console.log(status);
+      status.push(isValidate(allTemplate[i], vectors[i]));
     }
-    setScreen(
-      <DKScreenResult
-        references={allReference}
-        input={vectors}
-        allTemplate={allTemplate}
-        allStatus={allStatus}
-      />
-    );
-    // console.log(vectors);
+    console.log(status);
+    setAllStatus(status);
+
+    gotoHome();
   }
 
-  const [screen, setScreen] = useState(
-    <DKScreenRegister handleRegCompletion={handleRegCompletion} />
-  );
+  const screens = {
+    home: (
+      <>
+        <Button variant="outlined" onClick={() => gotoRegister()}>
+          Register
+        </Button>
+        <Button variant="outlined" onClick={() => gotoLogin()}>
+          Login
+        </Button>
+        <DKScreenResult
+          references={allReference}
+          input={inputVectors}
+          allTemplate={allTemplate}
+          allStatus={allStatus}
+        />
+      </>
+    ),
+    register: <DKScreenRegister handleRegCompletion={handleRegCompletion} />,
+    login: <DKScreenLogin handleLoginCompletion={handleLoginCompletion} />,
+  };
 
-  return screen;
+  function gotoHome() {
+    setCurPage("home");
+  }
+
+  function gotoRegister() {
+    setCurPage("register");
+  }
+
+  function gotoLogin() {
+    setCurPage("login");
+  }
+
+  return screens[curPage];
 }
