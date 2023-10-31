@@ -1,5 +1,12 @@
 <h1 align="center">UPDATES PAGE</h1>
 
+## 📌 31 October 2023
+
+- Add Material UI from [MUI](https://mui.com/material-ui/).
+- Refresh Interface and simplified
+- Add reset button and home page onwards navigation
+- Fix Details info, structured into compact tables
+
 ## 📌 26 October 2023
 
 - Formed the algorithm to extract template vector from given signatures
