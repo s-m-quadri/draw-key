@@ -66,6 +66,13 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
     setVectors(mVectors);
   }
 
+  function handleReset() {
+    setLines([]);
+    setlinesP1([]);
+    setlinesP2([]);
+    setVectors([]);
+  }
+
   return (
     <div>
       <h2>Draw Signature</h2>
@@ -84,17 +91,50 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
           <DKGraphPlot lines={lines} title={title} />
         </Stage>
       </div>
-      <DKGraphInfo lines={lines} />
+
+      <button onClick={() => handleReset()}>Reset Drawing</button>
 
       <button onClick={() => handleCompletion("Prev", lines, vectors)}>
-        Prev
+        Go Back
       </button>
       <button onClick={() => handleCompletion("Next", lines, vectors)}>
-        Next
+        Continue
       </button>
 
       <details>
-        <summary>Debug Info...</summary>
+        <summary>Signature Vector(s)</summary>
+        <h2>Vectors</h2>
+        <div className={styles.details}>
+          <ol>
+            {vectors.map((vector, i) => (
+              <li>
+                <code>{`${vector}`}</code>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </details>
+
+      <details>
+        <summary>Processing Details</summary>
+        <h2>Original Signature</h2>
+        <div className={styles.canvas}>
+          <Stage
+            width={globalThis.window?.innerWidth / 2}
+            height={globalThis.window?.innerHeight / 2}
+            className={styles.board}
+            onMouseDown={handleMouseDown}
+            onMousemove={handleMouseMove}
+            onMouseup={handleMouseUp}
+            onTouchStart={handleMouseDown}
+            onTouchMove={handleMouseMove}
+            onTouchEnd={handleMouseUp}
+          >
+            <DKGraphPlot lines={lines} title={"Step 1/3"} />
+          </Stage>
+        </div>
+        <DKGraphInfo lines={lines} />
+
         <h2>Curve Smoothing</h2>
         <div className={styles.canvas}>
           <Stage
@@ -102,7 +142,7 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
             height={globalThis.window?.innerHeight / 2}
             className={styles.board}
           >
-            <DKGraphPlot lines={linesP1} />
+            <DKGraphPlot lines={linesP1} title={"Step 2/3"} />
           </Stage>
         </div>
         <DKGraphInfo lines={linesP1} />
@@ -114,21 +154,10 @@ export default function DKGraph({ handleCompletion, nextLine, title }) {
             height={globalThis.window?.innerHeight / 2}
             className={styles.board}
           >
-            <DKGraphPlot lines={linesP2} />
+            <DKGraphPlot lines={linesP2} title={"Step 3/3"} />
           </Stage>
         </div>
         <DKGraphInfo lines={linesP2} />
-
-        <h2>Vectors</h2>
-        <div className={styles.details}>
-          <ol>
-            {vectors.map((vector, i) => (
-              <li>
-                <code>{`${vector}`}</code>
-              </li>
-            ))}
-          </ol>
-        </div>
       </details>
     </div>
   );
