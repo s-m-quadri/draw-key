@@ -88,7 +88,7 @@ function Body() {
 
       <DrawerAppBar />
 
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main" sx={{ p: 3 }} display={"block"}>
         <Toolbar />
         {curContent}
       </Box>
